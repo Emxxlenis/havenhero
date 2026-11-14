@@ -1,0 +1,121 @@
+:root {
+  color-scheme: light dark;
+  --fondo: #f6f7f8;
+  --superficie: #ffffff;
+  --borde: #d5dbe0;
+  --texto: #1b242b;
+  --tenue: #55636e;
+  --acento: #0f6b5c;
+  --aviso-fondo: #fff6dc;
+  --aviso-borde: #d9a514;
+  --error: #a4262c;
+  --inundacion: #2b6fd6;
+  --ladera: #b46a1b;
+  --refugio: #0f6b5c;
+  --punto: #c2255c;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: #101418;
+    --superficie: #172229;
+    --borde: #2a3844;
+    --texto: #e7eef4;
+    --tenue: #a9b7c2;
+    --acento: #8fd0c6;
+    --aviso-fondo: #2c2610;
+    --aviso-borde: #b88a12;
+    --error: #ff9a9f;
+    --inundacion: #6ea4f5;
+    --ladera: #e0a15a;
+    --refugio: #8fd0c6;
+    --punto: #f783ac;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  line-height: 1.5;
+}
+
+main { max-width: 980px; margin: 0 auto; padding: 28px 16px 64px; }
+
+h1 { margin: 0 0 4px; font-size: 1.9rem; letter-spacing: -0.02em; }
+h2 { margin: 0 0 8px; font-size: 1rem; }
+a { color: var(--acento); }
+.bajada { margin: 0 0 16px; color: var(--tenue); }
+
+.aviso {
+  margin: 0 0 16px;
+  padding: 10px 14px;
+  background: var(--aviso-fondo);
+  border-left: 4px solid var(--aviso-borde);
+  border-radius: 4px;
+  font-size: 0.94rem;
+}
+.aviso-fuerte { margin-top: 16px; }
+
+.controles { margin-bottom: 12px; }
+form { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: 10px; }
+label { display: grid; gap: 2px; font-size: 0.85rem; color: var(--tenue); }
+input {
+  width: 9.5rem;
+  padding: 7px 9px;
+  font: inherit;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+}
+button {
+  padding: 7px 14px;
+  font: inherit;
+  color: var(--texto);
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover, button:focus-visible { border-color: var(--acento); }
+form button { background: var(--acento); border-color: var(--acento); color: var(--fondo); font-weight: 600; }
+.atajos { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 0.9rem; color: var(--tenue); }
+#puntos-referencia { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.error { margin: 8px 0 0; color: var(--error); }
+
+.mapa { height: 440px; border: 1px solid var(--borde); border-radius: 8px; background: var(--superficie); }
+.mapa-sin-conexion { display: grid; place-items: center; padding: 24px; text-align: center; color: var(--tenue); }
+
+.leyenda { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; margin: 8px 0 16px; font-size: 0.85rem; color: var(--tenue); }
+.marca { display: inline-block; width: 11px; height: 11px; margin-right: -8px; border-radius: 50%; border: 2px solid; }
+.marca-inundacion { border-color: var(--inundacion); }
+.marca-ladera { border-color: var(--ladera); }
+.marca-refugio { border-color: var(--refugio); background: var(--refugio); }
+.marca-punto { border-color: var(--punto); background: var(--punto); }
+.nota-leyenda { flex-basis: 100%; }
+
+.resultado { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tarjeta { background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px; padding: 16px; }
+.tarjeta p { margin: 0 0 6px; }
+.principal { font-size: 1.5rem; font-weight: 650; line-height: 1.25; }
+.de-cien { font-size: 1rem; font-weight: 400; color: var(--tenue); }
+.nivel { font-weight: 600; }
+.pie-tarjeta { margin-top: 10px; font-size: 0.85rem; color: var(--tenue); }
+
+table { width: 100%; margin-top: 10px; border-collapse: collapse; font-size: 0.88rem; }
+th, td { padding: 5px 6px; text-align: left; border-top: 1px solid var(--borde); }
+th { color: var(--tenue); font-weight: 600; }
+td:nth-child(n + 2), th:nth-child(n + 2) { text-align: right; white-space: nowrap; }
+
+.explicacion { margin-top: 24px; font-size: 0.94rem; color: var(--tenue); }
+.explicacion h2 { color: var(--texto); }
+.explicacion p { margin: 0 0 8px; }
+
+@media (max-width: 700px) {
+  .resultado { grid-template-columns: 1fr; }
+  .mapa { height: 340px; }
+}

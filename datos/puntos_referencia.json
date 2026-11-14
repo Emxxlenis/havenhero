@@ -1,0 +1,10 @@
+{
+  "demostracion": true,
+  "nota": "Puntos de acceso rápido para la demo. Las coordenadas son aproximadas y solo sirven para ubicar el mapa. La demo abre en el primero.",
+  "puntos": [
+    { "id": "aguablanca", "nombre": "Aguablanca", "lat": 3.408, "lon": -76.49 },
+    { "id": "centro", "nombre": "Centro", "lat": 3.452, "lon": -76.532 },
+    { "id": "siloe", "nombre": "Siloé", "lat": 3.428, "lon": -76.568 },
+    { "id": "norte", "nombre": "Norte", "lat": 3.478, "lon": -76.527 }
+  ]
+}

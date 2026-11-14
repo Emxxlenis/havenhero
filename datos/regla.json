@@ -1,0 +1,17 @@
+{
+  "demostracion": true,
+  "nota": "Parámetros de la regla. Los umbrales de nivel y el rectángulo del área son elecciones de la demostración, no criterios técnicos ni límites oficiales.",
+  "radio_tierra_km": 6371.0,
+  "niveles": [
+    { "id": "alto", "etiqueta": "Alto", "desde": 67 },
+    { "id": "medio", "etiqueta": "Medio", "desde": 34 },
+    { "id": "bajo", "etiqueta": "Bajo", "desde": 1 },
+    { "id": "fuera_de_alcance", "etiqueta": "Fuera del alcance de las zonas", "desde": 0 }
+  ],
+  "area_de_estudio": {
+    "lat_min": 3.3,
+    "lat_max": 3.52,
+    "lon_min": -76.62,
+    "lon_max": -76.44
+  }
+}

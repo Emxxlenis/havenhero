@@ -1,0 +1,26 @@
+{
+  "demostracion": true,
+  "nota": "Zonas de ejemplo. Son círculos trazados a mano para mostrar la regla; no provienen de ningún mapa oficial de amenaza ni de un estudio técnico.",
+  "tipos": {
+    "inundacion": "Inundación",
+    "ladera": "Ladera"
+  },
+  "zonas": [
+    {
+      "id": "inundacion-oriente",
+      "tipo": "inundacion",
+      "nombre": "Zona de demostración de inundación (oriente)",
+      "lat": 3.41,
+      "lon": -76.49,
+      "alcance_km": 9.0
+    },
+    {
+      "id": "ladera-occidente",
+      "tipo": "ladera",
+      "nombre": "Zona de demostración de ladera (occidente)",
+      "lat": 3.43,
+      "lon": -76.57,
+      "alcance_km": 7.0
+    }
+  ]
+}

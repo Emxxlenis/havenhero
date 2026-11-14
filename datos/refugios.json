@@ -1,0 +1,11 @@
+{
+  "demostracion": true,
+  "nota": "Refugios de ejemplo. Los nombres y las coordenadas son ficticios; no corresponden a albergues reales ni a un catálogo oficial.",
+  "refugios": [
+    { "id": "refugio-centro", "nombre": "Refugio de demostración Centro", "lat": 3.452, "lon": -76.532 },
+    { "id": "refugio-norte", "nombre": "Refugio de demostración Norte", "lat": 3.478, "lon": -76.527 },
+    { "id": "refugio-sur", "nombre": "Refugio de demostración Sur", "lat": 3.395, "lon": -76.54 },
+    { "id": "refugio-oriente", "nombre": "Refugio de demostración Oriente", "lat": 3.408, "lon": -76.485 },
+    { "id": "refugio-ladera", "nombre": "Refugio de demostración Ladera", "lat": 3.428, "lon": -76.568 }
+  ]
+}

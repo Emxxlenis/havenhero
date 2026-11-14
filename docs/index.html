@@ -3,89 +3,88 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>HavenHero · predicción y refugio</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <style>
-    :root { color-scheme: dark; }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: "Segoe UI", Helvetica, Arial, sans-serif; background: #101418; color: #e7eef4; line-height: 1.5; }
-    main { max-width: 980px; margin: 0 auto; padding: 40px 20px 72px; }
-    h1 { font-weight: 560; letter-spacing: -0.03em; margin: 0 0 8px; }
-    a { color: #8fd0c6; }
-    p, .en { color: #c5d0d8; }
-    .en { font-size: 0.92rem; }
-    .map { height: 440px; border-radius: 12px; border: 1px solid #2a3844; margin: 18px 0; }
-    .row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }
-    button { background: #1a2832; color: #e7eef4; border: 1px solid #34505f; border-radius: 999px; padding: 8px 14px; cursor: pointer; }
-    button:hover { border-color: #8fd0c6; }
-    .result { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .card { background: #172229; border: 1px solid #2a3844; border-radius: 12px; padding: 16px; }
-    .card b { display: block; font-size: 1.6rem; }
-    @media (max-width: 700px) { .result { grid-template-columns: 1fr; } }
-  </style>
+  <title>HavenHero: exposición y refugio más cercano</title>
+  <meta name="description" content="Demostración: índice de exposición a ladera o inundación para un punto en Cali y refugio más cercano. No es un mapa oficial de amenaza." />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="estilos.css" />
 </head>
 <body>
   <main>
-    <p class="en">Disaster forecast and nearest shelter. Demonstration index for Cali, not an official hazard map.</p>
-    <h1>HavenHero</h1>
-    <p>Elige un punto en Cali. El índice dice qué exposición pesa más, ladera o inundación, y cuál de los refugios de demostración queda más cerca.</p>
-    <p><a href="https://github.com/Emxxlenis/havenhero">Código</a></p>
-    <div class="row" id="presets"></div>
-    <div id="map" class="map"></div>
-    <section class="result">
-      <article class="card"><span>Exposición</span><b id="score">—</b><span id="hazard"></span></article>
-      <article class="card"><span>Refugio más cercano</span><b id="shelter">—</b><span id="distance"></span></article>
-    </section>
-    <p>Las zonas y los refugios son un conjunto de demostración para mostrar la decisión. No son el mapa oficial de riesgo ni el catálogo de 2024, que no está publicado.</p>
-  </main>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="logic.js"></script>
-  <script>
-    const presets = [
-      ["Centro", 3.452, -76.532],
-      ["Aguablanca", 3.408, -76.49],
-      ["Siloé", 3.428, -76.568],
-      ["Norte", 3.478, -76.527],
-    ];
-    const box = document.getElementById("presets");
-    presets.forEach(([name, lat, lon]) => {
-      const button = document.createElement("button");
-      button.textContent = name;
-      button.onclick = () => show(lat, lon);
-      box.appendChild(button);
-    });
+    <header>
+      <h1>HavenHero</h1>
+      <p class="bajada">Para un punto en Cali: qué exposición pesa más, ladera o inundación, y cuál es el refugio más cercano.</p>
+    </header>
 
-    const map = L.map("map").setView([3.44, -76.53], 12);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap",
-    }).addTo(map);
-    ZONES.forEach((zone) => {
-      L.circle([zone.lat, zone.lon], {
-        radius: (zone.reachKm * 1000) / 2,
-        color: zone.id === "flood" ? "#3d8bfd" : "#e0a15a",
-        weight: 1,
-        fillOpacity: 0.12,
-      }).addTo(map).bindTooltip(zone.name);
-    });
-    SHELTERS.forEach((shelter) => {
-      L.circleMarker([shelter.lat, shelter.lon], { radius: 7, color: "#8fd0c6" })
-        .addTo(map)
-        .bindTooltip(shelter.name);
-    });
-    let marker = null;
-    function show(lat, lon) {
-      const reading = exposure(lat, lon);
-      const shelter = nearestShelter(lat, lon);
-      document.getElementById("score").textContent = reading.score;
-      document.getElementById("hazard").textContent = reading.hazard;
-      document.getElementById("shelter").textContent = shelter.name;
-      document.getElementById("distance").textContent = shelter.km + " km";
-      if (marker) map.removeLayer(marker);
-      marker = L.marker([lat, lon]).addTo(map);
-      map.panTo([lat, lon]);
-    }
-    map.on("click", (event) => show(event.latlng.lat, event.latlng.lng));
-    show(3.408, -76.49);
-  </script>
+    <p class="aviso" role="note">
+      <strong>Datos de demostración.</strong>
+      Las zonas, los refugios y los umbrales de esta página son ejemplos para mostrar la regla.
+      No es un mapa oficial de amenaza ni un catálogo de albergues, y no reemplaza las indicaciones de las autoridades de gestión del riesgo.
+    </p>
+
+    <section class="controles" aria-label="Elegir un punto">
+      <form id="formulario" novalidate>
+        <label>Latitud <input id="lat" name="lat" inputmode="decimal" autocomplete="off" required /></label>
+        <label>Longitud <input id="lon" name="lon" inputmode="decimal" autocomplete="off" required /></label>
+        <button type="submit">Evaluar</button>
+      </form>
+      <div class="atajos">
+        <span>Puntos de referencia:</span>
+        <span id="puntos-referencia"></span>
+      </div>
+      <p id="error" class="error" role="alert" hidden></p>
+    </section>
+
+    <div id="mapa" class="mapa" aria-label="Mapa: tocá un punto para evaluarlo"></div>
+    <p class="leyenda">
+      <span class="marca marca-inundacion"></span> zona de inundación
+      <span class="marca marca-ladera"></span> zona de ladera
+      <span class="marca marca-refugio"></span> refugio
+      <span class="marca marca-punto"></span> punto evaluado
+      <span class="nota-leyenda">Todo de demostración. El borde de cada círculo es donde el índice de esa zona llega a 0.</span>
+    </p>
+
+    <section class="resultado" aria-live="polite">
+      <article class="tarjeta" id="tarjeta-exposicion">
+        <h2>Exposición</h2>
+        <p class="principal"><span id="puntaje">-</span><span class="de-cien"> / 100</span></p>
+        <p id="nivel" class="nivel"></p>
+        <p id="amenaza"></p>
+        <table>
+          <thead><tr><th scope="col">Zona</th><th scope="col">Distancia al centro</th><th scope="col">Puntaje</th></tr></thead>
+          <tbody id="detalle-zonas"></tbody>
+        </table>
+      </article>
+      <article class="tarjeta" id="tarjeta-refugio">
+        <h2>Refugio más cercano</h2>
+        <p class="principal" id="refugio-nombre">-</p>
+        <p id="refugio-distancia"></p>
+        <p id="refugio-empate"></p>
+        <p class="pie-tarjeta">La distancia es en línea recta. No considera vías, pendiente, puentes ni si el camino está transitable.</p>
+      </article>
+    </section>
+
+    <p id="fuera-del-area" class="aviso aviso-fuerte" role="status" hidden>
+      El punto está fuera del rectángulo de la demostración. El índice no dice nada sobre ese lugar y el refugio indicado puede quedar muy lejos.
+    </p>
+
+    <section class="explicacion">
+      <h2>Cómo leer el resultado</h2>
+      <p>
+        El puntaje de cada zona baja en línea recta de 100 en su centro a 0 en el borde de su alcance. La exposición del punto es el puntaje más alto.
+        Es un índice de cercanía a zonas dibujadas a mano: no es una probabilidad, no usa lluvia, pendiente ni registros de eventos, y no predice nada.
+      </p>
+      <p>
+        Un puntaje de 0 significa que el punto queda fuera del alcance de las zonas de ejemplo, no que el lugar sea seguro.
+      </p>
+      <p>
+        <a href="https://github.com/Emxxlenis/havenhero">Código, datos y pruebas</a>
+      </p>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="datos.js"></script>
+  <script src="regla.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

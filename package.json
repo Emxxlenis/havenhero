@@ -1,0 +1,8 @@
+{
+  "name": "havenhero",
+  "private": true,
+  "description": "Pruebas de la regla de la demo estática. Sin dependencias.",
+  "scripts": {
+    "test": "node --test tests/regla.test.js"
+  }
+}

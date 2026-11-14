@@ -1,0 +1,130 @@
+{
+  "nota": "Casos compartidos. Los corren pytest (tests/test_casos.py) y node (tests/regla.test.js) contra la misma expectativa. 'zonas' y 'refugios' reemplazan los datos de datos/ cuando aparecen. 'espera' se compara como subconjunto del resultado.",
+  "casos": [
+    {
+      "nombre": "encima del centro de la zona de inundación",
+      "lat": 3.41,
+      "lon": -76.49,
+      "espera": {
+        "dentro_del_area": true,
+        "exposicion": {
+          "puntaje": 100,
+          "nivel": "alto",
+          "dominantes": ["inundacion-oriente"],
+          "zonas": [
+            { "id": "inundacion-oriente", "distancia_m": 0, "puntaje": 100 },
+            { "id": "ladera-occidente", "puntaje": 0 }
+          ]
+        },
+        "refugio": { "id": "refugio-oriente", "distancia_m": 598, "empatados": [] }
+      }
+    },
+    {
+      "nombre": "encima del centro de la zona de ladera",
+      "lat": 3.43,
+      "lon": -76.57,
+      "espera": {
+        "exposicion": { "puntaje": 100, "nivel": "alto", "dominantes": ["ladera-occidente"] },
+        "refugio": { "id": "refugio-ladera" }
+      }
+    },
+    {
+      "nombre": "lejos de las zonas pero cerca de Cali: sin amenaza dominante y con refugio",
+      "lat": 3.9,
+      "lon": -76.2,
+      "espera": {
+        "dentro_del_area": false,
+        "exposicion": {
+          "puntaje": 0,
+          "nivel": "fuera_de_alcance",
+          "dominantes": [],
+          "zonas": [{ "puntaje": 0 }, { "puntaje": 0 }]
+        },
+        "refugio": { "id": "refugio-norte" }
+      }
+    },
+    {
+      "nombre": "muy lejos (otra ciudad): el índice es 0 y no negativo",
+      "lat": 4.711,
+      "lon": -74.072,
+      "espera": {
+        "dentro_del_area": false,
+        "exposicion": { "puntaje": 0, "nivel": "fuera_de_alcance", "dominantes": [] }
+      }
+    },
+    {
+      "nombre": "empate de distancia entre refugios: gana el id menor sin importar el orden del archivo",
+      "lat": 3.45,
+      "lon": -76.53,
+      "refugios": [
+        { "id": "b-norte", "nombre": "B", "lat": 3.46, "lon": -76.53 },
+        { "id": "c-lejos", "nombre": "C", "lat": 3.49, "lon": -76.53 },
+        { "id": "a-sur", "nombre": "A", "lat": 3.44, "lon": -76.53 }
+      ],
+      "espera": { "refugio": { "id": "a-sur", "distancia_m": 1112, "empatados": ["b-norte"] } }
+    },
+    {
+      "nombre": "empate triple: dos refugios en el mismo sitio y uno simétrico",
+      "lat": 3.45,
+      "lon": -76.53,
+      "refugios": [
+        { "id": "z", "nombre": "Z", "lat": 3.46, "lon": -76.53 },
+        { "id": "m", "nombre": "M", "lat": 3.44, "lon": -76.53 },
+        { "id": "k", "nombre": "K", "lat": 3.46, "lon": -76.53 }
+      ],
+      "espera": { "refugio": { "id": "k", "empatados": ["m", "z"] } }
+    },
+    {
+      "nombre": "punto encima de un refugio: distancia 0",
+      "lat": 3.452,
+      "lon": -76.532,
+      "espera": { "refugio": { "id": "refugio-centro", "distancia_m": 0, "empatados": [] } }
+    },
+    {
+      "nombre": "sin refugios: no se sugiere ninguno y la exposición se calcula igual",
+      "lat": 3.41,
+      "lon": -76.49,
+      "refugios": [],
+      "espera": { "refugio": null, "exposicion": { "puntaje": 100 } }
+    },
+    {
+      "nombre": "sin zonas: índice 0 sin amenaza dominante",
+      "lat": 3.41,
+      "lon": -76.49,
+      "zonas": [],
+      "espera": {
+        "exposicion": { "puntaje": 0, "nivel": "fuera_de_alcance", "dominantes": [], "zonas": [] },
+        "refugio": { "id": "refugio-oriente" }
+      }
+    },
+    {
+      "nombre": "empate de puntaje entre zonas: las dos quedan como dominantes en orden alfabético",
+      "lat": 3.45,
+      "lon": -76.53,
+      "zonas": [
+        { "id": "zona-norte", "tipo": "ladera", "nombre": "N", "lat": 3.46, "lon": -76.53, "alcance_km": 4.0 },
+        { "id": "zona-al-sur", "tipo": "inundacion", "nombre": "S", "lat": 3.44, "lon": -76.53, "alcance_km": 4.0 }
+      ],
+      "espera": { "exposicion": { "puntaje": 72, "nivel": "alto", "dominantes": ["zona-al-sur", "zona-norte"] } }
+    },
+    {
+      "nombre": "justo pasado el borde del alcance: puntaje 0",
+      "lat": 3.45,
+      "lon": -76.53,
+      "zonas": [{ "id": "unica", "tipo": "ladera", "nombre": "U", "lat": 3.46, "lon": -76.53, "alcance_km": 1.1 }],
+      "espera": { "exposicion": { "puntaje": 0, "dominantes": [] } }
+    },
+    {
+      "nombre": "latitud fuera de rango",
+      "lat": 91,
+      "lon": -76.5,
+      "espera_error": true
+    },
+    {
+      "nombre": "longitud fuera de rango",
+      "lat": 3.4,
+      "lon": -181,
+      "espera_error": true
+    }
+  ]
+}
