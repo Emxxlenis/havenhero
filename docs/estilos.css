@@ -1,35 +1,35 @@
 :root {
   color-scheme: light dark;
-  --fondo: #f6f7f8;
+  --fondo: #ffffff;
   --superficie: #ffffff;
-  --borde: #d5dbe0;
-  --texto: #1b242b;
-  --tenue: #55636e;
-  --acento: #0f6b5c;
-  --aviso-fondo: #fff6dc;
-  --aviso-borde: #d9a514;
-  --error: #a4262c;
-  --inundacion: #2b6fd6;
-  --ladera: #b46a1b;
-  --refugio: #0f6b5c;
-  --punto: #c2255c;
+  --borde: #e5e7eb;
+  --texto: #111827;
+  --tenue: #6b7280;
+  --acento: #111827;
+  --aviso-fondo: #f9fafb;
+  --aviso-borde: #e5e7eb;
+  --error: #b91c1c;
+  --inundacion: #2563eb;
+  --ladera: #c2410c;
+  --refugio: #111827;
+  --punto: #be123c;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --fondo: #101418;
-    --superficie: #172229;
-    --borde: #2a3844;
-    --texto: #e7eef4;
-    --tenue: #a9b7c2;
-    --acento: #8fd0c6;
-    --aviso-fondo: #2c2610;
-    --aviso-borde: #b88a12;
-    --error: #ff9a9f;
-    --inundacion: #6ea4f5;
-    --ladera: #e0a15a;
-    --refugio: #8fd0c6;
-    --punto: #f783ac;
+    --fondo: #0a0a0a;
+    --superficie: #111827;
+    --borde: #1f2937;
+    --texto: #f3f4f6;
+    --tenue: #9ca3af;
+    --acento: #f3f4f6;
+    --aviso-fondo: #111827;
+    --aviso-borde: #1f2937;
+    --error: #fca5a5;
+    --inundacion: #93c5fd;
+    --ladera: #fdba74;
+    --refugio: #f3f4f6;
+    --punto: #fda4af;
   }
 }
 
@@ -37,26 +37,45 @@
 
 body {
   margin: 0;
-  font-family: system-ui, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   background: var(--fondo);
   color: var(--texto);
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
-main { max-width: 980px; margin: 0 auto; padding: 28px 16px 64px; }
+.barra {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 4rem;
+  padding: 0 1.25rem;
+  background: color-mix(in srgb, var(--fondo) 86%, transparent);
+  border-bottom: 1px solid var(--borde);
+  backdrop-filter: blur(12px);
+}
+.sitio { color: var(--texto); font-weight: 300; font-size: 1.05rem; letter-spacing: -0.02em; text-decoration: none; }
+.barra-nav { display: flex; gap: 1rem; }
+.barra-nav a { color: var(--tenue); font-size: 0.75rem; font-weight: 500; letter-spacing: 0.08em; text-decoration: none; }
+.barra-nav a:hover { color: var(--texto); }
 
-h1 { margin: 0 0 4px; font-size: 1.9rem; letter-spacing: -0.02em; }
-h2 { margin: 0 0 8px; font-size: 1rem; }
-a { color: var(--acento); }
+main { max-width: 72rem; margin: 0 auto; padding: 3.5rem 1.25rem 5rem; }
+
+h1 { margin: 0 0 0.75rem; font-size: clamp(2.4rem, 5vw, 4.25rem); font-weight: 300; letter-spacing: -0.03em; line-height: 1.1; }
+h2 { margin: 0 0 8px; font-size: 1.25rem; font-weight: 500; letter-spacing: -0.02em; }
+a { color: var(--texto); }
 .bajada { margin: 0 0 16px; color: var(--tenue); }
 
 .aviso {
   margin: 0 0 16px;
-  padding: 10px 14px;
+  padding: 1rem 1.1rem;
   background: var(--aviso-fondo);
-  border-left: 4px solid var(--aviso-borde);
-  border-radius: 4px;
-  font-size: 0.94rem;
+  border: 1px solid var(--aviso-borde);
+  border-radius: 0.5rem;
+  color: var(--tenue);
+  font-size: 0.95rem;
 }
 .aviso-fuerte { margin-top: 16px; }
 
@@ -82,7 +101,7 @@ button {
   cursor: pointer;
 }
 button:hover, button:focus-visible { border-color: var(--acento); }
-form button { background: var(--acento); border-color: var(--acento); color: var(--fondo); font-weight: 600; }
+form button { background: var(--acento); border-color: var(--acento); color: var(--fondo); font-weight: 500; border-radius: 0.5rem; padding: 0.7rem 1.4rem; }
 .atajos { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 0.9rem; color: var(--tenue); }
 #puntos-referencia { display: inline-flex; flex-wrap: wrap; gap: 6px; }
 .error { margin: 8px 0 0; color: var(--error); }
@@ -99,7 +118,7 @@ form button { background: var(--acento); border-color: var(--acento); color: var
 .nota-leyenda { flex-basis: 100%; }
 
 .resultado { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.tarjeta { background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px; padding: 16px; }
+.tarjeta { background: var(--superficie); border: 1px solid var(--borde); border-radius: 0.5rem; padding: 1.25rem 1.5rem; }
 .tarjeta p { margin: 0 0 6px; }
 .principal { font-size: 1.5rem; font-weight: 650; line-height: 1.25; }
 .de-cien { font-size: 1rem; font-weight: 400; color: var(--tenue); }
