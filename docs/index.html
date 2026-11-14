@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HavenHero · predicción y refugio</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: "Segoe UI", Helvetica, Arial, sans-serif; background: #101418; color: #e7eef4; line-height: 1.5; }
+    main { max-width: 980px; margin: 0 auto; padding: 40px 20px 72px; }
+    h1 { font-weight: 560; letter-spacing: -0.03em; margin: 0 0 8px; }
+    a { color: #8fd0c6; }
+    p, .en { color: #c5d0d8; }
+    .en { font-size: 0.92rem; }
+    .map { height: 440px; border-radius: 12px; border: 1px solid #2a3844; margin: 18px 0; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }
+    button { background: #1a2832; color: #e7eef4; border: 1px solid #34505f; border-radius: 999px; padding: 8px 14px; cursor: pointer; }
+    button:hover { border-color: #8fd0c6; }
+    .result { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .card { background: #172229; border: 1px solid #2a3844; border-radius: 12px; padding: 16px; }
+    .card b { display: block; font-size: 1.6rem; }
+    @media (max-width: 700px) { .result { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="en">Disaster forecast and nearest shelter. Demonstration index for Cali, not an official hazard map.</p>
+    <h1>HavenHero</h1>
+    <p>Elige un punto en Cali. El índice dice qué exposición pesa más, ladera o inundación, y cuál de los refugios de demostración queda más cerca.</p>
+    <p><a href="https://github.com/Emxxlenis/havenhero">Código</a></p>
+    <div class="row" id="presets"></div>
+    <div id="map" class="map"></div>
+    <section class="result">
+      <article class="card"><span>Exposición</span><b id="score">—</b><span id="hazard"></span></article>
+      <article class="card"><span>Refugio más cercano</span><b id="shelter">—</b><span id="distance"></span></article>
+    </section>
+    <p>Las zonas y los refugios son un conjunto de demostración para mostrar la decisión. No son el mapa oficial de riesgo ni el catálogo de 2024, que no está publicado.</p>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="logic.js"></script>
+  <script>
+    const presets = [
+      ["Centro", 3.452, -76.532],
+      ["Aguablanca", 3.408, -76.49],
+      ["Siloé", 3.428, -76.568],
+      ["Norte", 3.478, -76.527],
+    ];
+    const box = document.getElementById("presets");
+    presets.forEach(([name, lat, lon]) => {
+      const button = document.createElement("button");
+      button.textContent = name;
+      button.onclick = () => show(lat, lon);
+      box.appendChild(button);
+    });
+
+    const map = L.map("map").setView([3.44, -76.53], 12);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap",
+    }).addTo(map);
+    ZONES.forEach((zone) => {
+      L.circle([zone.lat, zone.lon], {
+        radius: (zone.reachKm * 1000) / 2,
+        color: zone.id === "flood" ? "#3d8bfd" : "#e0a15a",
+        weight: 1,
+        fillOpacity: 0.12,
+      }).addTo(map).bindTooltip(zone.name);
+    });
+    SHELTERS.forEach((shelter) => {
+      L.circleMarker([shelter.lat, shelter.lon], { radius: 7, color: "#8fd0c6" })
+        .addTo(map)
+        .bindTooltip(shelter.name);
+    });
+    let marker = null;
+    function show(lat, lon) {
+      const reading = exposure(lat, lon);
+      const shelter = nearestShelter(lat, lon);
+      document.getElementById("score").textContent = reading.score;
+      document.getElementById("hazard").textContent = reading.hazard;
+      document.getElementById("shelter").textContent = shelter.name;
+      document.getElementById("distance").textContent = shelter.km + " km";
+      if (marker) map.removeLayer(marker);
+      marker = L.marker([lat, lon]).addTo(map);
+      map.panTo([lat, lon]);
+    }
+    map.on("click", (event) => show(event.latlng.lat, event.latlng.lng));
+    show(3.408, -76.49);
+  </script>
+</body>
+</html>
